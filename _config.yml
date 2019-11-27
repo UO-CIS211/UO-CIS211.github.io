@@ -18,16 +18,16 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
-email: your-email@example.com
+title: Supplement Text for CIS 211 at University of Oregon
+email: michal@uoregon.edu
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Background readings for CIS 211 at University of Oregon.  We will quickly run off
+  the end of the textbook you used in CIS 210.  These documents provide additional
+  material on the subject matter of CIS 211, including object-oriented programming
+  in Python.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+github_username:  Michal.Young
 
 # Build settings
 theme: minima
