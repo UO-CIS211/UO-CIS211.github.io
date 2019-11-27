@@ -1,4 +1,4 @@
-#Magic Methods
+# Magic Methods
 
 If you want to add two integers in Python, 
 you can just type `42 + 17`.   But what if 
