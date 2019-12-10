@@ -30,9 +30,10 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  Michal.Young
 
 # Build settings
-theme: jekyll-theme-slate
+theme: Minima
 plugins:
   - jekyll-feed
+markdown_ext: markdown,mkdown,mkdn,mkd,md
 
 # Exclude from processing.
 # The following items will not be processed, by default.
