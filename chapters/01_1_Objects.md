@@ -1,4 +1,7 @@
-# Objects
+---
+layout: page
+title: Objects
+---
 
 In Python, objects are used to represent 
 information.  Every variable you use in a Python 
@@ -7,7 +10,11 @@ The values you have been using so far –
 numbers, strings, dicts, lists, etc – are objects. 
 They are among the built-in classes of Python, 
 i.e., kinds of value that are already defined 
-when you start the Python interpreter.
+when you start the Python interpreter.  
+
+You are not limited to those built-in classes. 
+You can use them as a foundation to build your 
+own. 
 
 ## Example: Points
 
@@ -16,7 +23,7 @@ For example, if we wanted to write a program
 to draw a graph, we might want to work with 
 cartesian coordinates, representing each 
 point as an (x,y) pair.  We might represent the 
-point as a tuple like `(5,7`, or we could represent 
+point as a tuple like `(5,7)`, or we could represent 
 it as the list `[5, 7]`, or we could represent
 it as a dict `{"x": 5, "y": 7}`, and that 
 might be satisfactory.   If we wanted to represent moving a point (x,y) by some distance (dx, dy), we could define a a function like 
@@ -208,9 +215,104 @@ m = p.move(v)
 
 assert m.x == 8 and m.y == 10
 ```
+## Variables *refer* to objects
+
+Before reading on, try to predict what the following
+little program will print.
+
+```python
+x = [1, 2, 3]
+y = x
+y.append(4)
+print(x)
+print(y)
+```
+
+Now execute that program.  Did you get the result you 
+expected?  If it surprised you, try visualizing it in 
+PythonTutor (http://pythontutor.com/).  You should get a 
+diagram that looks like this: 
 
 
+![](img/pythontutor-list-alias.png)
+
+`x` and `y` are distinct variables, but they are both references to the same list.   When we change `y` by appending 4, we are changing the same object 
+that `x` refers to.   We say that `x` and `y` are *aliases*, two names for the same object. 
+
+Note this is very different from the following: 
+
+```python
+x = [1, 2, 3]
+y = [1, 2, 3]
+y.append(4)
+print(x)
+print(y)
+```
+
+Each time we create a list like `[1, 2, 3]`, we are creating a distinct 
+list.  In this seocond version of the program, `x` and `y` are not 
+aliases. 
+
+![](img/pythontutor-list-noalias.png)
+
+It is essential to remember that variables hold *references* to objects, and 
+there may be more than one reference to the same object.  We can observe the 
+same phenomenon with classes we add to Python.  Consider this program: 
+
+```python
+class Point:
+    """An (x,y) coordinate pair"""
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    def move(self, dx: int, dy: int):
+        self.x += dx
+        self.y += dy
+
+p1 = Point(3,5)
+p2 = p1
+p1.move(4,4)
+print(p2.x, p2.y)
+```
+
+Once again we have created two variables that are *aliases*, i.e., they 
+refer to the same object.   PythonTutor illustrates: 
 
 
+![](img/pythontutor-aliased-point.png)
 
+Note that `Point` is a reference to the *class*, while `p1` and `p2` are references to the Point *object* we created from the Point class.  When we call `p1.move`, the `move` method of class `Point` makes a change to 
+the object that is referenced by both `p1` and `p2`.  We often say that 
+a method like `move` *mutates* an object. 
 
+There is another way we could have written a method like `move`.  
+Instead of *mutating* the object (changing the values of its *fields* 
+`x` and `y`), we could have created a new Point object at the 
+modified coordinates: 
+
+```python
+class Point:
+    """An (x,y) coordinate pair"""
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    def moved(self, dx: int, dy: int) -> "Point":
+        return Point(self.x + dx, self.y + dy)
+
+p1 = Point(3,5)
+p2 = p1
+p1 = p1.moved(4,4)
+print(p1.x, p1.y)
+print(p2.x, p2.y)
+```
+
+Notice that method `moved`, unlike method `move` in the prior example, 
+return a new Point object that is distinct from the Point object that was aliased.  Initially `p1` and `p2` may be aliases, after `p2 = p1`: 
+
+![](img/pythontutor-point-unaliased-step1.png)
+
+But after `p1 = p1.moved(4,4)`, `p1` refers to a new, distinct object: 
+
+![](img/pythontutor-point-unaliased-step2.png)
