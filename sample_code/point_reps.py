@@ -27,31 +27,43 @@ class Point:
         y = self.y + d.y
         return Point(x,y)
 
-    def move_to(self, new_x, new_y):
+    def move_to(self, new_x: int, new_y: int):
         """Change the coordinates of this Point"""
         self.x = new_x
         self.y = new_y
 
-    def __add__(self, other: "Point"):
+    def __add__(self, other: "Point") -> "Point":
         """(x,y) + (dx, dy) = (x+dx, y+dy)"""
         return Point(self.x + other.x, self.y + other.y)
 
+    def __repr__(self) -> str:
+        return f"Point({self.x}, {self.y})"
 
-p = Point(3,4)
-v = Point(5,6)
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y})"
+
+
+p = Point(3, 4)
+v = Point(5, 6)
 m = p.move(v)
 
 assert m.x == 8 and m.y == 10
 
-m.move_to(19,23)
+m.move_to(19, 23)
 
 assert m.x == 19 and m.y == 23
 
-p = Point(3,4)
-v = Point(5,6)
+p = Point(3, 4)
+v = Point(5, 6)
 r = p + v
 
 assert r.x == 8 and r.y == 10
 
+print(f"p is ({p.x}, {p.y})")
+print(f"p is {p}")
+print(f"repr(p) is {repr(p)}")
 
-
+print("=== str vs repr with lists ===")
+print(p)
+print(v)
+print([p, v])

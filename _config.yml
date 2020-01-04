@@ -29,8 +29,14 @@ github_username:  MichalYoung
 
 # Build settings
 theme: Minima
+
 plugins:
   - jekyll-feed
+
+collections:
+  reference:
+    output: true
+
 markdown_ext: markdown,mkdown,mkdn,mkd,md
 
 # Exclude from processing.

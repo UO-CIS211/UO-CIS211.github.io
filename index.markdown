@@ -14,6 +14,6 @@ layout: home
 
 # Addenda
 
-* CIS 211 [Coding Standards](addenda/CodingStandards.html)
+* CIS 211 [Coding Standards](reference/CodingStandards.html)
 
 

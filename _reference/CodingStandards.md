@@ -1,9 +1,9 @@
 ---
-title: CIS 211 Coding Standards
+title: Coding Standards
 layout: page
 ---
 
-## Style Guide for Python Programs
+## CIS 211 Style Guide for Python Programs
 
    Most software development organizations have coding guidelines
    that constitute a <em>house style</em>.  These may be based on some
@@ -77,7 +77,69 @@ def frobnaz(n: int, s: str) -> str:
 An absent return type is equivalent to specifying that the
 function or method returns `None`.
 
-### Composite type hints
+## Method headers
+
+We write type contracts for the methods of classes almost 
+exactly as we would for a function, with two differences.  
+First, we do not give a type for the `self` argument, as it 
+is implied by the class. 
+
+```python
+class Point:
+    """An (x,y) coordinate pair of integers"""
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    def move_to(self, new_x: int, new_y: int):
+        """Change the coordinates of this Point"""
+        self.x = new_x
+        self.y = new_y
+```
+
+As with functions, the return type annotation `-> None` may be 
+omitted for methods that do not return a value.  Such methods 
+will generally be *mutators*, i.e., it may be assumed that they 
+modify the value of the `self` object, like the 
+`move_to` method above.  
+
+Methods that return a 
+value other than `None` (and which therefore have the `-> T` 
+annotation for some type `T`) should typically *not* modify 
+the value of the `self` object. On rare occasions, concise and 
+efficient code may require a method to both return a  
+value *and* modify the `self` object.  On those occasions, 
+the header comment of the method should explicitly and 
+unambiguously indicate that the method modifies the object. 
+
+### Forward type annotations
+
+The second case in which we cannot 
+simply write the type of an argument or return value is 
+when that type is the class we are defining.  
+The type is considered 
+undefined until the class is complete.  
+Thus we cannot write 
+
+```python
+    def __add__(self, other: Point) -> Point:
+        """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+        return Point(self.x + other.x, self.y + other.y)
+```
+
+because the `Point` class does not exist yet.  The workaround 
+is to place quotes around the type name to indicate that it 
+is a *forward reference*, i.e., a reference to a type that 
+we promise will exist soon even though it does not exist 
+quite yet. 
+ 
+```python
+    def __add__(self, other: "Point") -> "Point":
+        """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+        return Point(self.x + other.x, self.y + other.y)
+```
+
+## Composite type annotations
 
 Types like `int` and `str` can be used directly in 
 type annotations.  Types like `tuple` and `list` can also be 
@@ -107,9 +169,9 @@ Method headers follow the same rules as function signatures with
 the following exceptions:
 <ul>
   <li>The <em>self</em> argument of a regular method should not
-  have a type hint.</li>
+  have a type annotation.</li>
   <li>Similarly, the <em>cls</em> argument of a
-  class method should not have a type hint.</li>
+  class method should not have a type annotation.</li>
 </ul>
 
 <h2>Mutation</h2>
