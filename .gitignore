@@ -1,3 +1,7 @@
+# Apple and JetBrains metadata
+.DS_Store
+.idea
+# Jekyll products
 _site
 .sass-cache
 .jekyll-cache
