@@ -601,6 +601,7 @@ class RectList:
         total = 0
         for el in self.elements:
             total += el.area()
+        return total
 ```
 
 That seems reasonable, but how do we add `Rect` objects to the 
@@ -621,7 +622,16 @@ and we should especially avoid modifying instance variables anywhere
 except in methods.  Code that "breaks the abstraction", like the example
 above calling the `append` method of the `elements` instance variable, is 
 difficult to read and maintain. So we want instead to give `RectList`
-it's own `append` method.  But note, this method can be very simple! 
+it's own `append` method, so that we can write 
+
+```python
+li = RectList()
+li.append(Rect(Point(3,3), Point(5,7)))
+li.append(Rect(Point(2,2), Point(3,3)))
+print(f"Combined area is {li.area()}")
+```
+  
+The `append` method can be very simple! 
 
 ```python
     def append(self, item: Rect):

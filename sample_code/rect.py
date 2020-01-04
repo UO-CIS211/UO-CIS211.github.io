@@ -68,10 +68,17 @@ class RectList:
         total = 0
         for el in self.elements:
             total += el.area()
+        return total
 
     def append(self, item: Rect):
         """Delegate to elements"""
         self.elements.append(item)
+
+
+li = RectList()
+li.append(Rect(Point(3, 3), Point(5, 7)))
+li.append(Rect(Point(2, 2), Point(3, 3)))
+print(f"Combined area is {li.area()}")
 
 
 class Square(Rect):
