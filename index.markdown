@@ -3,9 +3,10 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Introduction to Computer Science
 ---
 
-# Pages
+# Supplement Chapters
 
 * Week 1: [Objects](chapters/01_1_Objects.html)
 
