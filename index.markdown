@@ -4,10 +4,7 @@
 
 layout: home
 ---
-# U. Oregon CIS 211, Winter 2020
 
-
-    
 # Pages
 
 * Week 1: [Objects](chapters/01_1_Objects.html)
