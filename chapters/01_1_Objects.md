@@ -239,7 +239,13 @@ defining a *special method* `__add__`:
         return Point(self.x + other.x, self.y + other.y)
 ```
 
-Special methods are more commonly known as *magic methods*. They allow us to define how arithmetic operations like `+` and `-` work for each class of object, as well as comparisons like `<` and `==`, and some other operations.  If `p` is a `Point` object, then `p + q` is interpreted as `p.__add__(q)`.  So finally we get a very compact and readable notation: 
+Special methods are more commonly known as *magic methods*. 
+They allow us to define how arithmetic operations like `+` 
+and `-` work for each class of object, as well as 
+comparisons like `<` and `==`, and some other operations.  
+If `p` is a `Point` object, then `p + q` is interpreted as 
+`p.__add__(q)`.  So finally we get a very compact and 
+readable notation: 
 
 ```python
 p = Point(3,4)
@@ -248,6 +254,8 @@ m = p.move(v)
 
 assert m.x == 8 and m.y == 10
 ```
+
+More: [Appendix on magic methods](appendix_Special.md)
 
 ## Magic for printing
 
