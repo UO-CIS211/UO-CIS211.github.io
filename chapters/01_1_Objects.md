@@ -255,7 +255,7 @@ m = p.move(v)
 assert m.x == 8 and m.y == 10
 ```
 
-More: [Appendix on magic methods](appendix_Special.md)
+More: [Appendix on magic methods](appendix_Special)
 
 ## Magic for printing
 

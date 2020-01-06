@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Appendix: Magic Methods
+title: Appendix -- Magic Methods
 ---
 
 Python's *special* methods are also 
@@ -31,6 +31,8 @@ classes like `RomanNumerals`.
 | `a // b`  | `a.__floordiv__(b)` |
 | `a % b`   | `a.__mod__(b)`  |
 | `a ** b`  | `a.__pow__(b)`  |
+
+## Augmented Assignment 
 
 Often we use an arithmetic operation 
 in combination with assignment, e.g., 
@@ -97,7 +99,7 @@ the built-in classes.
 Note that `str` and `repr` are often 
 called implicitly.  When we write 
 `f"The value of x is {x}"`, the 
-`{x}` is an implicit call to 
+`{x}` in the f-string is an implicit call to 
 `str(x)` (and therefore an implicit
 call to `x.__str__()`).  When we 
 type `x + y` in the Python console, 
@@ -107,7 +109,7 @@ to print it, so what is actually
 printed at the console is 
 `x.__add__(y).__repr__()`. 
 
-## Collection operations
+## Collection Operations
 
 Python provides convenient notation 
 for collections.  For example, if 
@@ -125,8 +127,8 @@ collection classes.
 | Operation | Interpreted as   |
 | --------- | ---------------- |
 | `len(c)`  | `c.__len__()`    |
-| `_ = c[k]`| `c.__getitem(k)` |
-| `c[k] = v`| `c.__setitem(k,v)` |
+| `_ = c[k]`| `c.__getitem__(k)` |
+| `c[k] = v`| `c.__setitem__(k,v)` |
 | `k in c`  | `c.__contains__(k)`|
 
 Python also lets us write 
