@@ -34,7 +34,7 @@ class Point:
 
 
 class Shape:
-    """An abstract class that encompasses different concrete
+    """An abstract base class that encompasses different concrete
     classes with common behavior but different representations.
     """
 
@@ -77,31 +77,20 @@ class Rect(Shape):
         return Rect(self.min_pt + delta, self.max_pt + delta)
 
     def __repr__(self) -> str:
-        return f"Rect({repr(self.min_pt)}, {repr(self.max_pt)}"
+        return f"Rect({repr(self.min_pt)}, {repr(self.max_pt)})"
 
     def __str__(self) -> str:
         return f"Rect({str(self.min_pt)}, {str(self.max_pt)})"
 
 
-class RectList:
-    """A collection of Rects."""
-
-    def __init__(self):
-        self.elements = []
+class ShapeList(list):
+    """A collection of Shapes."""
 
     def area(self) -> Number:
         total = 0
-        for el in self.elements:
+        for el in self:
             total += el.area()
         return total
-
-    def append(self, item: Rect):
-        """Delegate to elements"""
-        self.elements.append(item)
-
-    def __str__(self) -> str:
-        """Delegate to elements"""
-        return str(self.elements)
 
 
 class Square(Rect):
@@ -110,11 +99,17 @@ class Square(Rect):
         self.max_pt = self.min_pt + Point(size, size)
         self.size = size
 
+    def side(self) -> Number:
+        return self.size
+
     def translate(self, delta: Point) -> "Square":
-        return Square(self.min_pt, self.size)
+        return Square(self.min_pt + delta, self.size)
 
     def __str__(self) -> str:
-        return f"Square({str(self.min_pt)}, {self.size})"
+        return f"Square({self.min_pt}, {self.size})"
+
+    def __repr__(self) -> str:
+        return f"Square({repr(self.min_pt)}, {self.size})"
 
 
 # Triangles are a kind of shape, but the implementation of Rect
@@ -211,13 +206,14 @@ def triangle_tests():
     assert darn_close(rt.area(), 1.0), "Right triangle size should still be 1"
 
     # Should be the same if I rotate it 45 degrees
-    rt = Triangle(Point(0, math.sqrt(2.0)), Point(0, 0),
-                  Point(2.0 * sqrt(2.0), -2.0 * sqrt(2.0)))
+    rt = Triangle(Point(sqrt(2.0), sqrt(2.0)), Point(0, 0),
+                  Point(1.0 / sqrt(2.0), -1.0 / sqrt(2.0)))
     assert darn_close(rt.area(), 1.0), "Rotated size should still be 1"
 
     # And again if I nudge it off (0,0)
     rt = rt.translate(Point(3.0, 3.0))
     assert darn_close(rt.area(), 1.0), "Nudged and rotated should still be 1"
+    print("Triangle tests passed")
 
 
 def smoke_test():
@@ -230,17 +226,18 @@ def smoke_test():
     r2 = r1.translate(mvmt)  # Treat Point(4,5) as (dx, dy)
     print(f"{r1} + {mvmt} => {r2}")
     print(f"Area of {r1} is {r1.area()}")
-    # Rectlist is a list of Rect objects
-    li = RectList()
-    li.append(Rect(Point(3, 3), Point(5, 7)))
-    li.append(Rect(Point(2, 2), Point(3, 3)))
-    print(f"RectList with two rectangles {li}")
-    print(f"Combined area is {li.area()}")
+    # ShapeList is a list of Shape objects
+    li = ShapeList()
+    li.append(Rect(Point(3, 3), Point(5, 7)))  # 2x4 = 8
+    li.append(Square(Point(2, 2), 2))  # 2x2 = 4
+    li.append(Triangle(Point(0, 0), Point(0, 1), Point(2, 0)))  # Area 1
+    print(f"ShapeList {li}")
+    print(f"Combined area is {li.area()}, expecting 13")
     # Basic tests for Square
     print("Squares are Rects")
     p1 = Point(3, 5)
     sq = Square(p1, 5)
-    print(f"Square from {p1} side 5, {repr(sq)} prints as {sq}")
+    print(f"Square from {p1} side {sq.side()}, {repr(sq)} prints as {sq}")
     s2 = sq.translate(Point(2, 2))
     print(f"{sq} nudged (2,2) is {s2}")
     print("Triangle area tests")

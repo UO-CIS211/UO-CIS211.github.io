@@ -9,6 +9,7 @@ title: Introduction to Computer Science
 # Supplement Chapters
 
 * Week 1: [Objects](chapters/01_1_Objects.html)
+* Week 2: [Class Hierarchies and Inheritance](chapters/02_1_Inheritance)
 
 # Addenda
 
