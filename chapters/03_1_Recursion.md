@@ -310,3 +310,184 @@ statement to determine that this is a base case.
 We know it is a base case because that is the only 
 case that this `Empty` node could be asked to handle! 
 
+## Other Recursive Structures and Methods
+
+*Search trees* like the table illustrated above are 
+one important group of tree structures in software, 
+but far from the only one.  Often trees represent 
+hierarchical "part-of" structures.  Examples 
+include geographic areas (country comprised of 
+states or provinces, states made up of counties, 
+counties further divided into precincts), 
+graphics (a scene made up of shapes, with 
+composite shapes and made up of simpler shapes, 
+and simple line segments, points, and polygons
+as leaf nodes), documents (a book made up of chapters,
+chapters made up of sections, sections made up 
+of paragraphs, paragraphs made up of lines) and so on. 
+There is hardly an application domain in which 
+tree structures do not find some use in software. 
+
+Wherever we find trees, we are likely to find some 
+methods that *walk* or *traverse* the trees 
+recursively.  Sometimes these are some form of search, but 
+not always.  Many of the functions we might write 
+for a list are also needed for a trees.  With a list, 
+we might have a choice between recursion and a simple
+loop.  For example, the recursive binary search 
+of a list could also be written without recursion, 
+using a loop.  The loop version of binary search is 
+hardly more complex than the recursive version, and 
+apt to execute a little faster.  With tree structures, 
+on the other hand, recursion is usually the better 
+choice.  
+
+One widely used tree structure that you may 
+have encountered already, and certainly will in the 
+future, is the Document Object Model (DOM) of HTML. 
+This is the data structure that a web browser 
+constructs from the HTML source code of a web page, 
+and it is the structure that style sheets and 
+scripts consume and manipulate to support all the 
+interactive effects of modern web applications. 
+ 
+Consider a very simplified version of the DOM 
+structure.  Each "<tag>...</tag>" segment 
+would be represented by a node in the tree. 
+Content that is plain text, with no tags, 
+might be leaf nodes.  We would begin with an
+abstract base class for DOM tree nodes: 
+
+```python
+class DOMNode:
+    """Abstract base class, defines the interface
+    that concrete DOM node classes must conform to.
+    """
+    def __init__(self):
+        raise NotImplementedError("Abstract constructor of DOMNode")
+```
+
+We might define several other methods that all 
+DOM nodes should implement, but for the example we'll
+consider only the simple magic methods like 
+`__str__`, which have default definitions already 
+inherited from class `object`.  
+
+The internal nodes of the DOM have tags (like 
+`h1`, `h2` etc. for "header" elements and 
+`p` for paragraphs).  These tagged sections 
+may be nested.  This is represented by giving 
+each node a *list* of children.  (Contrast this 
+to our search tree, in which each internal node 
+had exactly two children.) 
+
+```python
+class Tagged(DOMNode):
+    def __init__(self, tag: str, children: List[DOMNode] = []):
+        self.tag = tag
+        self.children = children
+
+    def append(self, node:DOMNode):
+        self.children.append(node)
+```
+
+How shall we define the `__str__` method for a 
+tagged node?  Let's make it look like html, 
+in which begin-tags like `<p>` are paired with 
+end-tags like `</p>`. 
+
+```python
+    def __str__(self) -> str:
+        """Text form is like HTML source code"""
+        parts = [str(part) for part in self.children]
+        return f"<{self.tag}> {' '.join(parts)} </{self.tag}>\n"
+```
+
+Notice that the `__str__` method uses f-strings 
+that implicitly make calls on the `__str__` methods 
+of the children of a `Tagged` node.  Thus producing 
+the text for a DOM tree is recursive.  
+
+Plain text nodes, which will always be leaves of 
+the DOM, will be simple: 
+
+```python
+class Plain(DOMNode):
+    """Plain text content is essentially just a string"""
+
+    def __init__(self, text: str):
+        self.text = text
+
+    def append(self, text: str):
+        self.text += text
+
+    def __str__(self):
+        return self.text
+```
+
+Where we have a recursive tree traversal, 
+leaf node classes usually handle a base case. 
+For creating a string representation, the 
+`__str__` methods implement a recursive walk 
+over the tree, and we can see that the simple 
+`__str__` method of `Plain` is a base case. 
+
+Now we can build a DOM tree with calls to 
+the constructors of `Tagged` and `Plain`: 
+
+```python
+page = Tagged("html",
+              [Tagged("head", [Tagged("title", [Plain("My Tremendous Novel")])]),
+               Tagged("body", [Tagged("h1", [Plain("A Tail of Two Mice")]),
+                               Tagged("h2", [Plain("By Little Charley Dickie")]),
+                               Tagged("p", [Plain("It was the worst of cats."),
+                                            Plain("Like, really bad.  Unbelievably bad.")]),
+                               Tagged("h3", [Plain("Copyright 2020 by L.C.D.")])
+                               ])  # End of body
+                ]) # End of document
+```
+
+If we print `page`, its `__str__` method will be 
+called, and the recursive `__str__` calls will 
+produce the following output: 
+
+```
+ <html> <head> <title> My Tremendous Novel </title>
+ </head>
+ <body> <h1> A Tail of Two Mice </h1>
+ <h2> By Little Charley Dickie </h2>
+ <p> It was the worst of cats. Like, really bad.  Unbelievably bad </p>
+ <h3> Copyright 2020 by L.C.D. </h3>
+ </body>
+ </html>
+```
+
+## Summary
+
+The basic logic of recursion is the same for 
+object-oriented programs as for recursive 
+functions that do not involve classes and objects. 
+Just as before, we must identify one or more 
+base cases and one or more recursive cases that 
+build up complete results from simpler cases. 
+
+The key difference is that with classes and objects, 
+the recursive structure of the algorithms is often 
+the same as the recursive structure of the objects.
+Often we will have the base case in one subclass 
+and the recursive case in another subclass.  Instead
+of writing an `if` statement to control which case 
+applies, we simply let each class take care of the 
+part of the logic that belongs to it.   When a leaf
+node and an internal node both have a method `m`, 
+usually the method `m` in the leaf node class will 
+handle only the base case, and the method `m` in the 
+internal node class will handle only the recursive 
+case. 
+
+## Source Code 
+
+Source code for this chapter is in two files, 
+[03_recursion.py](../sample_code/03_recursion.py)
+and 
+[03_simpledom.py](../sample_code/03_simpledom.py).

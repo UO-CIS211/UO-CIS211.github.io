@@ -12,7 +12,7 @@ title: Introduction to Computer Science
 * Week 2: 
   * Part 1: [Class Hierarchies and Inheritance](chapters/02_1_Inheritance)
   * Part 2: [Notifiers and Model-View-Controller](chapters/02_2_Notifiers)
-
+* Week 3: [Recursion the OO Way](chapters/03_1_Recursion)
 # Addenda
 
 * CIS 211 [Coding Standards](reference/CodingStandards.html)
