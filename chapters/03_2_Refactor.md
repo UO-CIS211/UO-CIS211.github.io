@@ -30,7 +30,7 @@ For the moment, we'll assume you have identified a
 pattern of common code and variation among several 
 methods in subclasses of a common parent class. 
 
-![Common code and variations](img_03_1/refactor_redundant_methods.svg)
+![Common code and variations](img_03_1/refactor_redundant_methods.png)
 
 We'll look at two approaches to factoring the redundant 
 method, and then at refactoring code in conditionals 
@@ -45,7 +45,7 @@ be coded as a new method in each of the subclasses,
 while the common code is inherited from a single method 
 in the superclass: 
 
-![Refactor into methods](img_03_1/refactor_into_method.svg)
+![Refactor into methods](img_03_1/refactor_into_method.png)
 
 The inherited method appears only in the superclass 
 and is inherited into each subclass, where it calls the appropriate factored method
@@ -61,7 +61,7 @@ in each subclass.  Again the method can be written just
 once and inherited into each subclass, but each subclass 
 sets the appropriate variable value(s): 
 
-![One method to rule them all, and in the ether bind them](img_03_1/refactor_into_variable.svg)
+![One method to rule them all, and in the ether bind them](img_03_1/refactor_into_variable.png)
 
 ## Refactoring branching logic
 
