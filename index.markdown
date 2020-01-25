@@ -15,7 +15,9 @@ title: Introduction to Computer Science
 * Week 3: 
   * Part 1: [Recursion the OO Way](chapters/03_1_Recursion)
   * Part 2: [Refactoring Redundant Code](chapters/03_2_Refactor)
- 
+* Week 4: 
+  * [Aliasing on Purpose](chapters/04_1_Alias)
+
 # Addenda
 
 * CIS 211 [Coding Standards](reference/CodingStandards.html)
