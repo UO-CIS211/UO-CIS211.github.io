@@ -15,8 +15,8 @@ title: Introduction to Computer Science
 * Week 3: 
   * Part 1: [Recursion the OO Way](chapters/03_1_Recursion)
   * Part 2: [Refactoring Redundant Code](chapters/03_2_Refactor)
-* Week 4: 
-  * [Aliasing on Purpose](chapters/04_1_Alias)
+* Week 4: [Aliasing on Purpose](chapters/04_1_Alias)
+* Week 5: [Recursive Guess-and-Check](chapters/05_1_GuessCheck)
 
 # Addenda
 
