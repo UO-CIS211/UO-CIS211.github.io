@@ -1,7 +1,12 @@
 ---
 layout: page
+mathjax: true
 title:  Bit Twiddling
 ---
+
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 
 As you have undoubtably heard, the data and instructions
   manipulated by a modern digital computer are all in the
@@ -82,3 +87,8 @@ When we write a decimal number on paper, we use a place value system:  The
 digits '42' mean $$4\times{10^1} + 2\times{10^0}$$, and the digits '203' mean 
 $$2\times{10^2} + 0\times{10^1} + 3\times{10^0}$$. 
 
+Positive binary numbers are no different, except that the place value system 
+uses powers of 2 instead of powers of 10.  The binary number 101010
+means 
+$$1\times 2^5 + 0\times 2^4 + 1\times 2^3 + 0\times 2^2  +
+1\times 2^1 + 0\times 2^0$$, or 32+8+2 = 42. 
