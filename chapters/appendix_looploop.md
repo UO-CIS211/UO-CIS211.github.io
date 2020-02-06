@@ -104,8 +104,8 @@ for col in range(len(array[0])):
 		print(array[row][col])
 ```
 
-In the first iteration `col` is 0 and `row` is 0. 
-`array[0][0]` is the element in row 0 and and column 0, 
+In the first iteration `col` is `0` and `row` is `0`. 
+`array[0][0]` is the element in row `0` and and column `0`, 
 so `item1` will be printed.
 
 The takeaway: always know whether 
