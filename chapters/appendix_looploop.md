@@ -215,15 +215,6 @@ for team_i in range(len(array)):
 Sometimes introducing variables for both the index 
 and the element is useful in keeping the distinction clear: 
 
-```python
-for row_i in range(len(array)):
-    row = array[row_i]
-    for col_i in range(len(row)):
-        col = row[col_i]
-        ... 
-```
-
-or 
 
 ```python
 # Iteration by row
