@@ -17,7 +17,10 @@ title: Introduction to Computer Science
   * Part 2: [Refactoring Redundant Code](chapters/03_2_Refactor)
 * Week 4: [Aliasing on Purpose](chapters/04_1_Alias)
 * Week 5: [Recursive Guess-and-Check](chapters/05_1_GuessCheck)
-
+* Week 6: 
+    * Part 1: [Masking and Shifting Binary Values](chapters/06_1_Bits)
+    * Part 2 (coming soon): Negative binary numbers
+  
 # Addenda
 
 * [Coding Standards](reference/CodingStandards.html) for CIS 211 
