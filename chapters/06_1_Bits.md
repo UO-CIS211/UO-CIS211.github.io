@@ -15,7 +15,7 @@ As you have undoubtably heard, the data and instructions
   (decimal) floating point numbers, as whatever we choose 
   to represent.  Programming languages like Python help us
   mostly ignore that they are all really just binary numbers, 
-  and usually that is a good thing, but sometimesit is useful 
+  and usually that is a good thing, but sometimes it is useful 
    to peek under the covers and deal with the 
   binary representation more directly. 
   
@@ -109,7 +109,7 @@ $$1\times 2^5 + 0\times 2^4 + 1\times 2^3 + 0\times 2^2  +
 ## Treating bits as booleans
 
 Although we're used to using the binary values for ordinary
-  arithmetic (addition, subtraction, multiplication, etc), we can also
+  arithmetic (addition, subtraction, multiplication, etc.), we can also
   treat the individual binary digits as boolean values: 1 for True, 0
   for False.  The  boolean operations on the bits act exactly like
   their counterparts for truth values:
@@ -164,8 +164,8 @@ Why wouldn't that make sense?
 
 ## Shifting
 
-In addition to ordinary arithmetic (addition, subtraction, etc) and 
-bitwise operations (and, or, not), digital computers provide _shift_ 
+In addition to ordinary arithmetic (addition, subtraction, etc.) and 
+bitwise operations (_and_, _or_, _not_), digital computers provide _shift_ 
 operations that move binary digits within a memory word.  These 
 are written in Python as `<<` (shift left) and `>>` (shift right). 
 For example, `3 << 2` means that the value $$3_{10}$$, which is 
@@ -188,7 +188,7 @@ When we shift right with `>>`, some bits may be "shifted off" into the
 
 ![7 >> 2](img_06_01/shift_right.svg)
 
-The "bit bucket" is not a real thing.  It is a term programmers use 
+The "bit bucket" is not a physical thing.  It is a term programmers use 
 to indicate that those bits have been discarded. 
 
 In Python: 
@@ -244,7 +244,7 @@ In Python:
 Suppose we had two natural numbers between 0 and 15, inclusive. 
 Since $$15_{10}$$ is $$1111_2$$, each of these numbers 
 can be represented with 4 binary digits.  Suppose we wanted 
-to store them together, "packed" into a single 8 bit word. 
+to store them together, "packed" into a single 8-bit word. 
 We can do this by shifting one of them into bits 4..7, leaving 
 the other in bits 0..3, and combining them with "or". 
 
@@ -305,7 +305,7 @@ $$\textrm{ff}00\textrm{ff}_{16}$$,
 written as `#ff00ff` in HTML or CSS and written 
 `0xff00ff` in Python, for example, can also be 
 described in CSS as `rgb(255,0,255)`. 
- It is a a bright purple  with 
+ It is a bright purple  with 
 maximum values of red and blue ($$255_{10}$$ or 
 $$\textrm{ff}_{16}$$) 
 and no green component ($$00_{16}$$). 
