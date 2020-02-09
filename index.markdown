@@ -19,7 +19,7 @@ title: Introduction to Computer Science
 * Week 5: [Recursive Guess-and-Check](chapters/05_1_GuessCheck)
 * Week 6: 
     * Part 1: [Masking and Shifting Binary Values](chapters/06_1_Bits)
-    * Part 2 (coming soon): Negative binary numbers
+    * Part 2: [Negative Binary Numbers](chapters/06_2_NegBits)
   
 # Addenda
 

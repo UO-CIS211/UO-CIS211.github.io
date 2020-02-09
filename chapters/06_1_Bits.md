@@ -4,10 +4,6 @@ mathjax: true
 title:  Bit Twiddling
 ---
 
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
 As you have undoubtably heard, the data and instructions
   manipulated by a modern digital computer are all in the
   form of binary numbers.  Often we think of them in 
