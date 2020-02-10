@@ -20,6 +20,8 @@ title: Introduction to Computer Science
 * Week 6: 
     * Part 1: [Masking and Shifting Binary Values](chapters/06_1_Bits)
     * Part 2: [Negative Binary Numbers](chapters/06_2_NegBits)
+    * Part 3: [What the hex?](chapters/06_3_Hex) Hexadecimal 
+              notation for binary values
   
 # Addenda
 
