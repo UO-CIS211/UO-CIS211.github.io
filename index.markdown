@@ -22,6 +22,8 @@ title: Introduction to Computer Science
     * Part 2: [Negative Binary Numbers](chapters/06_2_NegBits)
     * Part 3: [What the hex?](chapters/06_3_Hex) Hexadecimal 
               notation for binary values
+* Week 7: [A Little Bit of Functional Programming](chapters/07_1_Functional)
+
   
 # Addenda
 
