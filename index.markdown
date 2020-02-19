@@ -23,7 +23,9 @@ title: Introduction to Computer Science
     * Part 3: [What the hex?](chapters/06_3_Hex) Hexadecimal 
               notation for binary values
 * Week 7: [A Little Bit of Functional Programming](chapters/07_1_Functional)
-
+* Week 8: 
+    * Part 1: [Two Pass Algorithms](chapters/08_1_Twopass)
+    * Part 2: (Coming soon)
   
 # Addenda
 
