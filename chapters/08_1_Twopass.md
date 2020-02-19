@@ -291,7 +291,7 @@ Your program will translate the label `r1bigger` into a
 PC-relative address, resulting in a modified ("resolved")
 version of the program, like this: 
 
-```python
+```
   
 # Determine the maximum of two integers.
 # This program triggers memory-mapped IO to
