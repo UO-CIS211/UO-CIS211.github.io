@@ -25,7 +25,7 @@ title: Introduction to Computer Science
 * Week 7: [A Little Bit of Functional Programming](chapters/07_1_Functional)
 * Week 8: 
     * Part 1: [Two Pass Algorithms](chapters/08_1_Twopass)
-    * Part 2: (Coming soon)
+    * Part 2: [Regular expressions](chapters/08_2_Regexp)
   
 # Addenda
 
