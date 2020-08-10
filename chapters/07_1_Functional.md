@@ -79,7 +79,8 @@ more useful in others:
 * Functions as values are sometimes more useful than classes 
   when functions are natural building blocks, especially when 
   we don't have as much need to maintain complex state. 
-  Functions make good building blocks when what we need 
+  Functions also make good building blocks even if state is complex
+  but more uniform than the functions we want to apply. 
   
 Sometimes either approach would be about equally applicable.  
 For example, in our calculator project, instead of creating 
