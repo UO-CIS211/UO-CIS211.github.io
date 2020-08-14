@@ -291,7 +291,8 @@ capacity.
 
 Hash tables (called "hashmaps" in Java) are a form of "scatter
  storage".   Let's consider the dict `{ "dog": 22, "cat": 13 }`, 
- and assume the `dict` structure initially has room for 5 entries.
+ and assume the `dict` structure initially has room for 5 (key, value)
+ pairs.
  
  ![`{"dog": 22, "cat": 13}`](img_internals/dict-2elem.svg)
  
@@ -306,18 +307,19 @@ Hash tables (called "hashmaps" in Java) are a form of "scatter
  function that maps the key deterministically to a
  value that is somewhat random (but always the same
  for a given key). For example, `hash("dog")` might return 28. 
- There are only 8 entries in the index, so we take
- 28 mod 8 to compute the index 4.  The `index[4]` contains 0,
- indicating that the entry for "dog" is in element 0
- of the _entries_ part of the structure.  
+ There are only 8 slots in the index, so we take
+ 28 mod 8 to compute the index 4.  Slot 4
+ of the index part contains 0,
+ indicating that the entry for "dog" is in slot 0
+ of the _items_ part of the structure.  
  
  Suppose we give the command `d["lizard"] = 18` to add 
  ("lizard", 18) to the hash table.  Maybe `hash("lizard")`
  returns 36.  36 mod 8 is 4, the same as 28 mod 8, and
- `index[4]` already contains a reference to the entry
+ slot 4 of the index already contains a reference to the entry
  for ("dog", 22).  This is called a _hash collision_ or
  just _collision_, because the hash indexes for
- "dog" and "lizard" have _collided_ at entry 4.
+ "dog" and "lizard" have _collided_ at slot 4.
 What should we do?  
 
 Python uses a
@@ -330,31 +332,31 @@ Python uses a
  which is 1.  But slot 1 is also in use!  So it adds a larger
  number, maybe 197.  (197 + 1) mod 8 is 6, so it tries slot
  6.  That slot is empty, so it stores 2 in that slot to
- indicate that slot 2 in the entries part is where ("lizard", 18)
+ indicate that slot 2 in the items part is where ("lizard", 18)
  can be found.
  
 ![Adding a lizard](img_internals/dict-3elem.svg)
  
  If we write `x = d["lizard"]`, the same set of _probes_ occurs:
  We hash "lizard" and get 36 % 8, and looking in slot 4 of
- the indexes we find 0.  We check slot 0 of the entries part, but
+ the indexes we find 0.  We check slot 0 of the items part, but
  instead of "lizard" we find "dog".  Next we add 5, which leads
  us to check entry 1, but we find "cat" instead of "lizard".  Finally
- we try slot 6 of the indexes, which leads us to slot 2 of the entries,
+ we try slot 6 of the indexes, which leads us to slot 2 of the items,
  where we find ("lizard", 18).  If we instead landed on an empty
  slot in the indexes, we would conclude that there was no key "lizard"
  and raise a key error. 
  
  Note that in our example, the capacity of the hash table is 
- 5 entries, but there are 8 entries in the `index` part of the
+ 5 items, but there are 8 slots in the index part of the
  structure.  We want to minimize the number of collisions, and we
  want the _probe sequences_ (like the sequence 4, 1, 6 for "lizard")
  as short as possible, but without wasting too much space.  At present
- Python 3 allocates about 1.5 times as many index entries as
+ Python 3 allocates about 1.5 times as many index slots as
  elements.  It uses a quadratic probe sequence that ensures that,
  if there is at least one empty index slot, it will always be
  found eventually.  The variable size portion of the dict structure
- is reallocated whenever the entries part is exhausted, so there will
+ is reallocated whenever the items part is exhausted, so there will
  always be available index slots. 
  
  
