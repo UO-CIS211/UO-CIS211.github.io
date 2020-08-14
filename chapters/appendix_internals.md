@@ -330,8 +330,8 @@ Python uses a
  in the index portion of the structure, and tries again.
  Let's say it adds 5, so it next tries slot (5 + 4) mod 8,
  which is 1.  But slot 1 is also in use!  So it adds a larger
- number, maybe 197.  (197 + 1) mod 8 is 6, so it tries slot
- 6.  That slot is empty, so it stores 2 in that slot to
+ number, maybe 197.  (197 + 1) mod 8 is 6, so it tries 
+ slot 6.  That slot is empty, so it stores 2 in that slot to
  indicate that slot 2 in the items part is where ("lizard", 18)
  can be found.
  
