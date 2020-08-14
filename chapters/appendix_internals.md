@@ -33,14 +33,17 @@ A more general guide for understanding Python's internals, even if you do not
 want to contribute to Python's development, can be found 
 at [`https://devguide.python.org/exploring/`](https://devguide.python.org/exploring/). 
 
-I have not yet watched Philip Guo's videos on CPython internals.  I expect 
-them to be very good ... Philip is the creator of the wonderful 
-[PythonTutor](http://pythontutor.com/).  You can find them at 
+Philip Guo, creator of the wonderful [PythonTutor](http://pythontutor
+.com/), has recorded lectures of a class he taught on on internals 
+ of CPython 2.7.  I have watched only parts.  They are very good, as
+  I would expect, but move a little slowly because they are
+   recordings of actual class interactions. You can find them at 
 [`http://pgbovine.net/cpython-internals.htm`](http://pgbovine.net/cpython-internals.htm).
 
 I expect these guides and the source code itself will be more accessible to 
 you when you are a little farther along in computer science.  In the remainder 
-of this document, I'll try to describe some key aspects of how CPython works, 
+of this document, I'll try to describe some key aspects of how
+ CPython 3 works, 
 but in less detail and with fewer assumptions about your background. 
 
 ## Translation and Execution 
@@ -152,7 +155,62 @@ for each of these.  The built-in classes are almost like
 classes you define in Python, but they are actually written 
 in C. 
 
-### Class int
+All Python objects, from integers to classes to strings, are 
+represented by `PyObject` structures (`struct`) in the CPython
+code.   All `PyObject` structures have a header part, which contains
+a reference to its type (which in Python is a `class` object)
+and a _reference count_, used by the garbage collector.
+Information specific to each built-in type in Python follows the
+`PyObject` header.  
+
+
+## Class `list`
+
+A Python `list` is represented by a structure sometimes called a 
+*flexible array*.  After the headers, elements of the list (which are 
+always references to other objects) are stored in an array.  We call 
+it a *flexible* array because the list has a capacity that may be 
+greater than the number of elements currently in the list.  For
+ example, if we had a list with two elements  
+
+![List object](img_internals/list-concept-2elem.svg)
+
+the `append` method would use the next available space in the array
+and update information in the list headers part of the structure.  
+
+![Appending one more](img_internals/list-concept-3elem.svg)
+
+This makes the `append` and `pop` methods very efficient if you always
+append and pop at the end of the list.  If the capacity of the list 
+is exhausted, appending a new element requires allocating a larger 
+flexible array. 
+
+![Grow the array](img_internals/list-concept-4elem.svg)
+
+The details are a little more complicated.  First, a `list` object, 
+like all Python objects, starts with a header that identifies the 
+type of the object and holds some bookkeeping information for the 
+garbage collector (the component that recycles unused objects).
+Second, Python can't just put the flexible part of the object adjacent
+to the header in memory, because there might not be available space to 
+expand it when its capacity is exhausted.  So, instead, the header 
+contains a pointer to the variable part.  When we expand the capacity 
+of the flexible array, we discard the old area (allowing the garbage 
+collector to recycle it) and allocate a new one. 
+
+![Expanding the flexible array representation](img_internals/list-object-append.svg)
+
+Python never moves object headers.  This is so that an object reference 
+in Python can be represented simply as a memory address.  If object
+ headers
+ moved around, references would either need a more complex
+  representation, or 
+ else all references to an object would need to be modified when the
+ object header moved.  In consequence, all the mutable container
+ classes of Python (lists, dicts, sets, strings) have a fixed header
+ with a pointer to the part that can grow. 
+ 
+### Class `int`
 
 Although memory hardware is not really "typed", CPUs have 
 operations like ADD that treat values as integers.
@@ -167,15 +225,6 @@ limit for integers in languages like Java and C.
 When you add two large integers, Python may actually execute 
 a loop to add up corresponding parts!  
 
-While the standard integer representation in all modern 
-computers I am aware of uses 2s complement representation 
-for negative numbers, Python uses sign and magnitude
-representation.  This complicates every operation, although 
-the interpreter uses some clever tricks to make arithmetic 
-on small numbers reasonably efficient.  
-
-
-
 Because the `int` class really is a class, it has methods 
 like any other class.  When we add `int` objects, we call the 
 `__add__` method just like we would if we were adding strings 
@@ -183,9 +232,132 @@ like any other class.  When we add `int` objects, we call the
 method for `int`, and all the other arithmetic methods for `int`, 
 are implemented in C.  
 
-## Class list
+While some `int` objects may have more digits than others, and 
+therefore occupy more a larger area of memory, `int` objects never
+have to grow because they are *immutable*.  When you add 329 and 41, 
+you do not change 329 or change 41, but rather create a new `int`
+object to hold the value 370. Because they are immutable, an `int`
+object need not be split into a fixed part and a variable part 
+like a `list` object. 
+
+While the standard integer representation in all modern 
+computers I am aware of uses 2s complement representation 
+for negative numbers, Python uses sign and magnitude
+representation.  The magnitude is represented by a sequence
+of 30-bit "digits". The number of digits is stored in the 
+header of the `int` object.  Since the number of digits can
+never be negative, a digit count of $-k$ is used to indicate
+that there are $k$ digits and the value is negative.  For
+example, a very large negative integer might have a size field
+of $-3$, indicating that it requires three 30-bit digits (each 
+of which is represented as a non-negative integer) and that the value
+is negative. 
+
+![A negative integer with 3 30-bit digits](img_internals/int-neg-3digits.svg)
+
+The sign and magnitude representation and variable length
+complicate every arithmetic operation,
+but the interpreter uses some clever tricks to make arithmetic 
+on small numbers reasonably efficient.  There are special cases in the
+interpreter code for integers small enough to fit entirely in a 32-bit
+machine word.  Python also keeps a stash of common small values that
+it reuses so that it doesn't have to create as many new `int` objects.
+Nevertheless arithmetic in Python is much, much slower than arithmetic
+in a language like C or Java.  
+
+You might be aware that a lot of scientific computing is done in
+ Python,
+ and you might wonder how that can be feasible given the very
+ inefficient (but flexible!) representation of `int`.  The answer is
+ that high performance scientific programs do not depend too
+ heavily on the built-in Python `int` type (nor even on `float`).
+ Scientific computing relies heavily on the `scipy` and `numpy
+ ` libraries,
+ which provide their own implementation of arrays and matrices of
+ numbers.  The numbers in those arrays and matrices are not Python
+ `int` or `float` numbers, but rather a more basic, less flexible
+ representation, exactly as you would find in C or C++ code (and in
+ fact implemented in C). 
 
 
+
+### Class `dict`
+
+A `dict` is implemented as a *hash table*.  Like a list, it is a
+container class that might need to be expanded as items are added, 
+so it is broken into a head part with a fixed address and a
+content part of "payload" that can be reallocated with a larger
+capacity.  
+
+Hash tables (called "hashmaps" in Java) are a form of "scatter
+ storage".   Let's consider the dict `{ "dog": 22, "cat": 13 }`, 
+ and assume the `dict` structure initially has room for 5 entries.
+ 
+ ![`{"dog": 22, "cat": 13}`](img_internals/dict-2elem.svg)
+ 
+ The _items_ part of the structure
+ holds the (key, value) pairs (which are 
+ actually references to other objects).
+ Each new entry is just appended, as in the 
+ `list` structure.  Indexes of their positions are
+ scattered in the _index_ part of the structure.
+ The scattering is determined by a _hash function_.
+ A hash function (or just _hash_) of a key is a
+ function that maps the key deterministically to a
+ value that is somewhat random (but always the same
+ for a given key). For example, `hash("dog")` might return 28. 
+ There are only 8 entries in the index, so we take
+ 28 mod 8 to compute the index 4.  The `index[4]` contains 0,
+ indicating that the entry for "dog" is in element 0
+ of the _entries_ part of the structure.  
+ 
+ Suppose we give the command `d["lizard"] = 18` to add 
+ ("lizard", 18) to the hash table.  Maybe `hash("lizard")`
+ returns 36.  36 mod 8 is 4, the same as 28 mod 8, and
+ `index[4]` already contains a reference to the entry
+ for ("dog", 22).  This is called a _hash collision_ or
+ just _collision_, because the hash indexes for
+ "dog" and "lizard" have _collided_ at entry 4.
+What should we do?  
+
+Python uses a
+ _collision resolution_ approach called _open addressing_.
+ You might also summarize it as "if once you don't succeed,
+ try, try again".  Slot 4 is taken, so Python adds something
+ to the index, again reduces it modulo the number of elements
+ in the index portion of the structure, and tries again.
+ Let's say it adds 5, so it next tries slot (5 + 4) mod 8,
+ which is 1.  But slot 1 is also in use!  So it adds a larger
+ number, maybe 197.  (197 + 1) mod 8 is 6, so it tries slot
+ 6.  That slot is empty, so it stores 2 in that slot to
+ indicate that slot 2 in the entries part is where ("lizard", 18)
+ can be found.
+ 
+![Adding a lizard](img_internals/dict-3elem.svg)
+ 
+ If we write `x = d["lizard"]`, the same set of _probes_ occurs:
+ We hash "lizard" and get 36 % 8, and looking in slot 4 of
+ the indexes we find 0.  We check slot 0 of the entries part, but
+ instead of "lizard" we find "dog".  Next we add 5, which leads
+ us to check entry 1, but we find "cat" instead of "lizard".  Finally
+ we try slot 6 of the indexes, which leads us to slot 2 of the entries,
+ where we find ("lizard", 18).  If we instead landed on an empty
+ slot in the indexes, we would conclude that there was no key "lizard"
+ and raise a key error. 
+ 
+ Note that in our example, the capacity of the hash table is 
+ 5 entries, but there are 8 entries in the `index` part of the
+ structure.  We want to minimize the number of collisions, and we
+ want the _probe sequences_ (like the sequence 4, 1, 6 for "lizard")
+ as short as possible, but without wasting too much space.  At present
+ Python 3 allocates about 1.5 times as many index entries as
+ elements.  It uses a quadratic probe sequence that ensures that,
+ if there is at least one empty index slot, it will always be
+ found eventually.  The variable size portion of the dict structure
+ is reallocated whenever the entries part is exhausted, so there will
+ always be available index slots. 
+ 
+ 
 
 ## References 
 
@@ -200,4 +372,4 @@ Artem Golubin, "Python internals: Arbitrary-precision integer
 implementation", 2017. 
 [https://rushter.com/blog/python-integer-implementation/](https://rushter.com/blog/python-integer-implementation/)
 
-
+Python Software Consortium.  [CPython version 3 source code repository](https://github.com/python/cpython)
