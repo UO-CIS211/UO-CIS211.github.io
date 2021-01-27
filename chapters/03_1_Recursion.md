@@ -111,12 +111,12 @@ In Python, the table could be represented as
 
 ```python
 alpha_tree = [4, "gamma",
-                [3, "beta",
-                    [1, "alpha", [], []],
-                    []],
-                [12, "epsilon",
-                    [9, "delta", [], []],
-                    [15, "zeta"], [], []]
+              [3, "beta",
+               [1, "alpha", [], []],
+               []],
+              [12, "epsilon",
+               [9, "delta", [], []],
+               [15, "zeta", [], []]]
               ]
 ```
 
