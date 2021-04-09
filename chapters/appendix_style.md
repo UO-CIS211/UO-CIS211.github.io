@@ -1,5 +1,7 @@
 ---
-layout: page title: Style Guide for Python Programs
+layout: page
+
+title: Style Guide for Python Programs
 ---
 
 Most software development organizations have coding guidelines that
