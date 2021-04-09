@@ -29,8 +29,8 @@ title: Introduction to Computer Science
   
 # Addenda
 
-* [Coding Standards](reference/CodingStandards.html) for CIS 211 
-* [What for?](chapters/appendix_looploop)  Using `for` loops 
-  to iterate through lists of lists
+* [Coding Standards](chapters/appendix_style) for CIS 211
+* [What for?](chapters/appendix_looploop)  Using `for` loops to iterate
+  through lists of lists
 
 

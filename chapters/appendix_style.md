@@ -16,18 +16,19 @@ Guidelines for CIS 211 projects are also based on
 some ways from those used in CIS 210. The key differences are that CIS
 211 style is designed to be more concise.
 
-## Living Document
+#### Living Document
 
 This document represents my best effort at defining style guidelines for
-CIS 211, but it will almost certainly require revision. We may find that
-we need some additional rules, or that some existing rules are
-annoyingly strict, or that something is not as clear as it should be.
-Students are encouraged to suggest revisions. Meanwhile, the standard
-for any particular project is the version of this document as of the
-project due date. If the guidelines change between distribution of a
-project and its due date, I will use Piazza to announce whether the
-change applies to the current project, and to the extent possible I will
-avoid making you revise projects that have already been started.
+CIS 211, but like many software documents it requires regular revision.
+We may find that we need some additional rules, or that some existing
+rules are annoyingly strict, or that something is not as clear as it
+should be. Also I make mistakes. Students are encouraged to suggest
+revisions. Meanwhile, the standard for any particular project is the
+version of this document as of the project due date. If the guidelines
+change between distribution of a project and its due date, I will use
+Piazza to announce whether the change applies to the current project,
+and to the extent possible I will avoid making you revise projects that
+have already been started.
 
 ## Basics: When in doubt, follow PEP 8
 
@@ -86,13 +87,110 @@ def frobnaz(n: int, s: str) -> str:
 An absent return type is equivalent to specifying that the function or
 method returns `None`.
 
-Method headers follow the same rules as function signatures with the
-following exceptions:
+Method headers follow the same rules as function signatures  `self`
+argument, as it is implied by the class.
 
-* The _self_ argument of a regular method should not have a type hint.
+```python
+class Point:
+  """An (x,y) coordinate pair of integers"""
 
-* Similarly, the _cls_ argument of a class method should not have a type
-  hint.
+  def __init__(self, x: int, y: int):
+    self.x = x
+    self.y = y
+
+  def move_to(self, new_x: int, new_y: int):
+    """Change the coordinates of this Point"""
+    self.x = new_x
+    self.y = new_y
+```
+
+As with functions, the return type annotation `-> None` may be omitted
+for methods that do not return a value. Such methods will generally be *
+mutators*, i.e., it may be assumed that they modify the value of
+the `self` object, like the
+`move_to` method above.
+
+### Mutation
+
+Methods that return a value other than `None` (and which therefore have
+the `-> T`
+annotation for some type `T`) should typically *not* modify the value of
+the `self` object.
+
+For example, if I write this function header:
+
+```python
+def jazziest(musicians: List[Musician]) -> Musician:
+```
+
+it is implicit that the input list of musicians is not modified.
+
+On rare occasions, concise and efficient code may require a method to
+both return a  
+value *and* modify the `self` object. The
+`pop` method for lists is an example of a mutator method that returns a
+result. This is permissible but must be clearly and explicitly
+documented in the header function, and to the extent possible the
+function name should suggest that it modifies its input.
+
+For example, if the above function returned the jazziest musician an
+also removed it from the list, the function header and docstring might
+look like this:
+
+```python
+def pull_jazziest(musicians: List[Musician]) -> Musician:
+  """Remove and return jazziest musician from musicians"""
+```
+
+### Forward type annotations
+
+The second case in which we cannot simply write the type of an argument
+or return value is when that type is the class we are defining.  
+The type is considered undefined until the class is complete.  
+Thus we cannot write
+
+```python
+    def __add__(self, other: Point) -> Point:
+  """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+  return Point(self.x + other.x, self.y + other.y)
+```
+
+because the `Point` class does not exist yet. The workaround is to place
+quotes around the type name to indicate that it is a *forward reference*
+, i.e., a reference to a type that we promise will exist soon even
+though it does not exist quite yet.
+
+```python
+    def __add__(self, other: "Point") -> "Point":
+  """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+  return Point(self.x + other.x, self.y + other.y)
+```
+
+### Composite type annotations
+
+Types like `int` and `str` can be used directly in type annotations.
+Types like `tuple` and `list` can also be used in type annotations, but
+typically we will prefer to be more specific, e.g., not just a `tuple`
+but more precisely
+*tuple in which the first element is a string and the second element is
+an int*. We can make this more specific annotation by importing type
+constructors from the `typing` module:
+
+```python
+from typing import Tuple, List, Dict
+
+
+def i_eat_tuples(t: Tuple[str, int]) -> Tuple[int, Tuple[int, int]]:
+  the_string, the_int = t
+  return (the_int, (the_int, the_int))
+
+
+def to_dict(ls: List[Tuple[str, int]]) -> Dict[str, int]:
+  result = {}
+  for key, value in ls:
+    result[key] = value
+  return result
+```
 
 ### Docstrings for functions and methods
 
@@ -124,30 +222,6 @@ conventions:
   when the `__repr__` does not look exactly like a call to the
   constructor.
 
-### Mutation
-
-A function or method that returns a result should not modify its input
-arguments. For example, if I write this function header:
-
-```python
-def jazziest(musicians: List[Musician]) -> Musician:
-```
-
-it is implicit that the input list of musicians is not modified.
-
-Occasionally returning a result and modifying an argument in the same
-function is helpful for writing concise and efficient code. The
-`pop` method for lists is an example of this. This is permissible but
-must be clearly and explicitly documented in the header function, and to
-the extent possible the function name should suggest that it modifies
-its input. For example, if the above function returned the jazziest
-musician an also removed it from the list, the function header and
-docstring might look like this:
-
-```python
-def pull_jazziest(musicians: List[Musician]) -> Musician:
-  """Remove and return jazziest musician from musicians"""
-```
 
 ## Classes: Public and quasi-private attributes
 
