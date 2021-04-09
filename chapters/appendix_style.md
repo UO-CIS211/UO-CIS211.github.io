@@ -1,6 +1,5 @@
 ---
 layout: page
-
 title: Style Guide for Python Programs
 ---
 
