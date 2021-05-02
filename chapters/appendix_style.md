@@ -295,8 +295,8 @@ area = radius * radius * 3.141592
 
 For more explanation of magic numbers and why they are undesirable, see
 the "Unnamed numerical constants" section of the
-[Magic Numbers]
-(https://en.wikipedia.org/wiki/Magic_number_(programming)) article on
+[Magic Numbers](https://en.wikipedia.org/wiki/Magic_number_(programming))
+article on
 Wikipedia. I use the concept here to refer not only to numeric
 constants, but also to strings that carry some special meaning in an
 application.
