@@ -274,7 +274,7 @@ class Point:
 
   def __eq__(self, other: object) -> bool:
     return type(self) == type(other) and
-           self.x == other.x and self.y == other.y
+    self.x == other.x and self.y == other.y
 ```
 
 Note that if we create a subclass `Point3D` with a z coordinate, this
@@ -282,6 +282,43 @@ Note that if we create a subclass `Point3D` with a z coordinate, this
 to
 `Point3D(5.0, 3.0)`; without the type check it would consider them
 equal.
+
+## Symbolic Constants vs Magic Values
+
+A _magic number_ is a constant other than 0, 1, `True`, `False`, or
+`""` or `[]` that appears literally in code. For example, this snippet
+contains a magic number:
+
+```python
+area = radius * radius * 3.141592
+```
+
+For more explanation of magic numbers and why they are undesirable, see
+the "Unnamed numerical constants" section of the
+[Magic Numbers]
+(https://en.wikipedia.org/wiki/Magic_number_(programming)) article on
+Wikipedia. I use the concept here to refer not only to numeric
+constants, but also to strings that carry some special meaning in an
+application.
+
+Very occasionally, if a constant is used only once, and if its meaning
+would be apparent to any developer reading the code, a magic constant
+might be acceptable. In general, though, magic numbers should be
+replaced by _symbolic constants_, e.g.,
+
+```python
+# Put this near the beginning of the file
+PI = 3.141592
+...
+# Then use the symbolic name throughout
+area = radius * radius * PI
+```
+
+If the same constant is used in more than one code file, and especially
+if it is a value that could conceivably be changed, it should be
+factored out into a separate source file. For example, if you are
+constructing a board game with multiple source files, the size of the
+game board probably belongs in a separate source file.
 
 ## Tests
 
@@ -295,7 +332,7 @@ code to test `code.py` should be named
 `test_code.py`.
 
 We will use the Python
-[unittest])(https://docs.python.org/3.6/library/unittest.html)
+[unittest](https://docs.python.org/3.6/library/unittest.html)
 framework when practical. The _unittest_ framework may not be suitable
 for testing some features, such as interactive input and output and
 simulation results. In those cases, tests may be written using whatever
