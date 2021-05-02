@@ -70,18 +70,18 @@ argument types in a docstring. Instead of this:
 
 ```python
 def frobnaz(n, s):
-  """frob the naz.
-  :n:  integer, frob it this many times
-  :s:  string from which we extract the naz
-  :returns: string in which the naz has been frobbed
-  """
+    """frob the naz.
+    :n:  integer, frob it this many times
+    :s:  string from which we extract the naz
+    :returns: string in which the naz has been frobbed
+    """
 ```
 
 we will write
 
 ```python
 def frobnaz(n: int, s: str) -> str:
-  """returns copy s with its frob nazzed n times"""
+    """returns copy s with its frob nazzed n times"""
 ```
 
 An absent return type is equivalent to specifying that the function or
@@ -139,7 +139,7 @@ look like this:
 
 ```python
 def pull_jazziest(musicians: List[Musician]) -> Musician:
-  """Remove and return jazziest musician from musicians"""
+    """Remove and return jazziest musician from musicians"""
 ```
 
 ### Forward type annotations
@@ -151,8 +151,8 @@ Thus we cannot write
 
 ```python
     def __add__(self, other: Point) -> Point:
-  """(x,y) + (dx, dy) = (x+dx, y+dy)"""
-  return Point(self.x + other.x, self.y + other.y)
+      """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+      return Point(self.x + other.x, self.y + other.y)
 ```
 
 because the `Point` class does not exist yet. The workaround is to place
@@ -162,8 +162,8 @@ though it does not exist quite yet.
 
 ```python
     def __add__(self, other: "Point") -> "Point":
-  """(x,y) + (dx, dy) = (x+dx, y+dy)"""
-  return Point(self.x + other.x, self.y + other.y)
+      """(x,y) + (dx, dy) = (x+dx, y+dy)"""
+      return Point(self.x + other.x, self.y + other.y)
 ```
 
 ### Composite type annotations
@@ -181,15 +181,15 @@ from typing import Tuple, List, Dict
 
 
 def i_eat_tuples(t: Tuple[str, int]) -> Tuple[int, Tuple[int, int]]:
-  the_string, the_int = t
-  return (the_int, (the_int, the_int))
+    the_string, the_int = t
+    return (the_int, (the_int, the_int))
 
 
 def to_dict(ls: List[Tuple[str, int]]) -> Dict[str, int]:
-  result = {}
-  for key, value in ls:
-    result[key] = value
-  return result
+    result = {}
+    for key, value in ls:
+      result[key] = value
+    return result
 ```
 
 ### Docstrings for functions and methods
