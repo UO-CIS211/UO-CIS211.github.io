@@ -314,11 +314,31 @@ PI = 3.141592
 area = radius * radius * PI
 ```
 
+When a group of constants represent alternatives, often
+they are best represented by an _enumeration_.  Python supports
+enumerations with the `enum` package.  The main advantage of 
+enumerations over other symbolic constants is in providing a type
+that can be declared in type annotations. 
+
+```python
+import enum
+
+class Color(enum.Enum):
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+
+light: Color  # Declare that variable light will only hold Color values
+light = Color.red
+```
+
 If the same constant is used in more than one code file, and especially
 if it is a value that could conceivably be changed, it should be
 factored out into a separate source file. For example, if you are
 constructing a board game with multiple source files, the size of the
 game board probably belongs in a separate source file.
+
+
 
 ## Tests
 
